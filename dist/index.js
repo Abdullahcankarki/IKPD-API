@@ -16,13 +16,13 @@ const TerminRouter_1 = __importDefault(require("./routes/TerminRouter"));
 const RechnungRouter_1 = __importDefault(require("./routes/RechnungRouter"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 5566;
+const PORT = process.env.PORT || 5555;
 // Middleware
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 // API-Routen
 app.use('/api/praxen', PraxisRouter_1.default);
-app.use('/api/therapeuten', TherapeutenRouter_1.default);
+app.use('/api/therapeut', TherapeutenRouter_1.default);
 app.use('/api/klienten', KlientenRouter_1.default);
 app.use('/api/auftraggeber', AuftraggeberRouter_1.default);
 app.use('/api/termine', TerminRouter_1.default);

@@ -17,4 +17,6 @@ router.get('/', PraxisController_1.getAllPraxen);
 router.get('/meine', PraxisController_1.getMeinePraxen);
 // Praxis löschen – nur für Admins
 router.delete('/:id', PraxisController_1.deletePraxis);
+// Praxis aktualisieren – nur für Admins
+router.put('/:id', PraxisController_1.updatePraxis);
 exports.default = router;

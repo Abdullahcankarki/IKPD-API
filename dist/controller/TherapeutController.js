@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTherapeut = exports.changePassword = exports.updateMe = exports.getMe = exports.createTherapeut = exports.login = void 0;
+exports.updateTherapeutById = exports.getAllTherapeuten = exports.deleteTherapeut = exports.changePassword = exports.updateMe = exports.getMe = exports.createTherapeut = exports.login = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const zod_1 = require("zod");
 const TherapeutModel_1 = __importDefault(require("../model/TherapeutModel"));
@@ -107,3 +107,27 @@ const deleteTherapeut = async (req, res) => {
     }
 };
 exports.deleteTherapeut = deleteTherapeut;
+const getAllTherapeuten = async (req, res) => {
+    try {
+        if (req.user?.rolle !== 'admin')
+            return res.status(403).json({ message: 'Nicht autorisiert' });
+        const therapeuten = await TherapeutModel_1.default.find().select('-password');
+        res.json(therapeuten);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Fehler beim Laden der Therapeuten', error: err.message });
+    }
+};
+exports.getAllTherapeuten = getAllTherapeuten;
+const updateTherapeutById = async (req, res) => {
+    try {
+        if (req.user?.rolle !== 'admin')
+            return res.status(403).json({ message: 'Nicht autorisiert' });
+        const updated = await TherapeutModel_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-password');
+        res.json(updated);
+    }
+    catch (err) {
+        res.status(400).json({ message: 'Fehler beim Aktualisieren', error: err.message });
+    }
+};
+exports.updateTherapeutById = updateTherapeutById;

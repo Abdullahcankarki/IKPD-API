@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePraxis = exports.getMeinePraxen = exports.getAllPraxen = exports.createPraxis = void 0;
+exports.updatePraxis = exports.deletePraxis = exports.getMeinePraxen = exports.getAllPraxen = exports.createPraxis = void 0;
 const PraxisModel_1 = __importDefault(require("../model/PraxisModel"));
 const zod_1 = require("zod");
 // Zod-Schema zur Validierung von Praxiseingaben
@@ -71,3 +71,20 @@ const deletePraxis = async (req, res) => {
     }
 };
 exports.deletePraxis = deletePraxis;
+const updatePraxis = async (req, res) => {
+    try {
+        if (req.user?.rolle !== 'admin') {
+            return res.status(403).json({ message: 'Nicht autorisiert' });
+        }
+        const parsed = praxisSchema.parse(req.body);
+        const aktualisiertePraxis = await PraxisModel_1.default.findByIdAndUpdate(req.params.id, parsed, { new: true });
+        if (!aktualisiertePraxis) {
+            return res.status(404).json({ message: 'Praxis nicht gefunden' });
+        }
+        res.json(aktualisiertePraxis);
+    }
+    catch (err) {
+        res.status(400).json({ message: 'Fehler beim Aktualisieren', error: err.message });
+    }
+};
+exports.updatePraxis = updatePraxis;
